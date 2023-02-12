@@ -19,13 +19,13 @@ The dataset contains information about a banks marketing campaign. We are intere
 
 **In 1-2 sentences, explain the solution: e.g. "The best performing model was a ..."**
 
-The best performing model was found by AutoML and used VotingEnsemble and has an accuracy of **0.9175**
+The best performing model was found by AutoML, used VotingEnsemble and has an accuracy of **0.9175**
 
 ## Scikit-learn Pipeline
 **Explain the pipeline architecture, including data, hyperparameter tuning, and classification algorithm.**
 
 We used the above-mentioned data set which contains 21 columns (including the target column). Features can be categorical, numeric or binary. The target is a binary variable.
-For classification, we used scikit-learns implementation of Logistic Regression which is suited for a binary classification task. We tuned the  hyperparameters regularization and max iterations strength using hyperdrive 
+For classification, we used scikit-learns implementation of Logistic Regression which is suited for a binary classification task. We tuned the  hyperparameters regularization strength and max iterations using hyperdrive 
 
 The best performing logistic regression model used max iterations of **200** and a regularization strength of **0.378**. The accuracy was **0.913**.
 
@@ -35,6 +35,7 @@ The best performing logistic regression model used max iterations of **200** and
 We can test a range of hyperparameters without searching the entire space which is computational expensive and time-consuming. This ensures that we use better hyperparameters than the default ones in our experiment.
 
 **What are the benefits of the early stopping policy you chose?**
+
 Bandit terminates runs which are not within the range of a slack factor compared to best run. This helps to decrease computing cost and time consumption.
 
 ## AutoML
@@ -47,14 +48,26 @@ The following models where used as voters: XGBoostClassifier, LightGBM, XGBoostC
 ## Pipeline comparison
 **Compare the two models and their performance. What are the differences in accuracy? In architecture? If there was a difference, why do you think there was one?**
 
-The two models performed as expected very similarly with AutoMLs model performing 0.4% better. I think since AutoML tried more models the small improvement can be explained by this.
+The two models performed as expected very similarly with AutoMLs model performing 0.4% better. 
+Since the difference is so small I suspect that AutoML might perform worse when the experiment is repeated with the same parameters.
 But it has to be noted that both models performed good on the dataset so the room for improvement was limited.
 
 
 ## Future work
 **What are some areas of improvement for future experiments? Why might these improvements help the model?**
 
-Class imbalance: Since the target labels are very imbalanced (8872 no and 1128 yes) we could use the techniques of over or under sampling to improve our model. These are proven methods which can deal with exactly this problem.
+**Class imbalance:** Since the target labels are very imbalanced (8872 no and 1128 yes) we could use the techniques of over or under sampling to improve our model. These are proven methods which can deal with exactly this problem.
+
+**Fixing azure kernel:** The provided kernel was not able to utilize AutoML unless we executed the following commands:
+```
+conda activate azureml_py38
+pip install certifi==2022.9.24
+sudo chmod 755 /anaconda/envs/azureml_py38/lib/python3.8/site-packages/nimbusml/internal/libs/pybridge.so
+```
+This should be fixed so that AutoML works out of the box.
+
+
+
 
 ## Proof of cluster clean up
 **If you did not delete your compute cluster in the code, please complete this section. Otherwise, delete this section.**
